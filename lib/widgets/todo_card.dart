@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robbinlaw/models/todo.dart';
 import 'package:robbinlaw/services/database.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoCard extends StatelessWidget {
   final String uid;
@@ -8,13 +9,16 @@ class TodoCard extends StatelessWidget {
 
   const TodoCard({Key key, this.uid, this.todo}) : super(key: key);
 
+  // background: Container(color: Colors.red),
+  // direction: DismissDirection.endToStart,
+  // onDismissed: (direction) => Database().deleteTodo(uid, todo.todoId),
+
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
       key: Key('todo-${todo.todoId}'),
-      background: Container(color: Colors.red),
-      direction: DismissDirection.endToStart,
-      onDismissed: (direction) => Database().deleteTodo(uid, todo.todoId),
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: Padding(
@@ -40,6 +44,14 @@ class TodoCard extends StatelessWidget {
           ),
         ),
       ),
+      actions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () => Database().deleteTodo(uid, todo.todoId),
+        ),
+      ],
     );
   }
 }
